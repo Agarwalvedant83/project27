@@ -3,78 +3,69 @@ const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
-const Constraint = Matter.Constraint;
-
-var bob1;
+const Constraint=Matter.Constraint;
+var roof,bob1;
+var bdropImg;
 
 function preload()
 {
-	
+  
 }
 
 function setup() {
-	var canvas = createCanvas(1600, 700);
+	createCanvas(1000, 700);
+
 
 	engine = Engine.create();
 	world = engine.world;
 
-	var bobDiameter = 40;
-	var posX = width/2;
-	var posY = height/4 + 500;
-
 	//Create the Bodies Here.
-	bob1 = new Bob(posX - bobDiameter*2, posY, bobDiameter);
-	bob2 = new Bob(posX - bobDiameter,posY, bobDiameter);
-	bob3 = new Bob(posX,posY,bobDiameter);
-	bob4 = new Bob(posX +  bobDiameter, posY, bobDiameter);
-	bob5 = new Bob(posX + bobDiameter * 2, posY, bobDiameter);
+	roof=new Ceiling(500,300,300,20);
+	bob1=new Bob(380,500);
+  rope1=new Rope(bob1.body,roof.body,-2*bob1.radius,0);
+	bob2=new Bob(440,500);
+	rope2=new Rope(bob2.body,roof.body,-bob2.radius,0);
+	bob3=new Bob(500,500)
+	rope3=new Rope(bob3.body,roof.body,0,0);
+	bob4=new Bob(560,500);
+	rope4=new Rope(bob4.body,roof.body,bob4.radius,0);
+	bob5=new Bob(620,500);
+	rope5=new Rope(bob5.body,roof.body,2*bob5.radius,0);
 
-	roof = new Roof(width/2, height/4, width/7, 20);
-
-	rope1 = new Rope(bob1.body,roof.body,-bobDiameter*2,0);
-	rope2 = new Rope(bob2.body,roof.body,-bobDiameter*1,0);
-	rope3 = new Rope(bob3.body,roof.body,0,0); 
- 	rope4 = new Rope(bob4.body,roof.body,bobDiameter*1,0); 
-	rope5 = new Rope(bob5.body,roof.body,bobDiameter*2,0);
-
-	Engine.run(engine);
+	
+	
   
 }
 
 
 function draw() {
-  rectMode(CENTER);
-  background(255);
+  //rectMode(CENTER);
+  background(211,211,211);
   Engine.update(engine);
-  
-  bob1.display();
-  bob2.display();
-  bob3.display();
-  bob4.display();
-  bob5.display();
+  //console.log(bob1);
 
-  rope1.display();
-  rope2.display();
-  rope3.display();
-  rope4.display();
-  rope5.display();
+  keyPressed();
 
-  roof.display();
   drawSprites();
+  roof.display();
+  bob1.display();
+  rope1.display();
+  bob2.display();
+  rope2.display();
+  bob3.display();
+  rope3.display();
+  bob4.display();
+  rope4.display();
+  bob5.display();
+  rope5.display();;
+ 
 }
 
-function keyPressed() { 
-	if (keyCode === UP_ARROW) 
-	{ Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-50,y:-45}); } 
-} 
+function keyPressed(){
+  if(keyCode===UP_ARROW && bob1.body.position.y>=500){
+      Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-1500,y:-1500});
+  }
+}
 
-	function drawLine(constraint) { 
-		bobPosition = constraint.bodyA.position 
-		roofPosition = constraint.bodyB.position 
-		roofBodyOffset = constraint.pointB; 
-		roofBodyX = roofBodyPosition.x + roofBodyOffset.x 
-		roofBodyY = roofBodyPosition.y + roofBodyOffset.y 
-		line(bobBodyPosition.x, bobBodyPosition.y, roofBodyX, roofBodyY); 
-	}
 
 
